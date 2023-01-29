@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+    postgresqldb:
+      image: postgres:14
+      restart: always
+      environment:
+        - POSTGRES_USER=root
+        - POSTGRES_PASSWORD=root
+        - POSTGRES_DB=ny_taxi
+      ports:
+        - 5429:5432
+      networks:
+        - backend
+      volumes:
+        - ./db:/var/lib/postgresql/data:rw
+
+    pythonapp:
+      networks:
+        - backend
+      build: "."
+      command: sh -c "sleep 10;  python3 pipeline.py -u root -p root -s postgresqldb -v 5432 -d ny_taxi -z https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv -i https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-01.csv.gz"
+      depends_on:
+        - postgresqldb
+
+
+# volumes:
+#     db:
+#       driver: local
+
+networks:
+  backend:
+    driver: bridge

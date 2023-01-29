@@ -1,0 +1,1 @@
+python3 pipeline.py -u postgres -p root -s localhost -v 5432 -d atm -z https://s3.amazonaws.com/nyc-tlc/misc/taxi+_zone_lookup.csv -i https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-01.csv.gz
